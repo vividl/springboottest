@@ -6,7 +6,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 
-import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicLong;
+
+import static java.util.Arrays.asList;
 
 @SpringBootApplication
 public class Application {
@@ -22,11 +24,11 @@ public class Application {
             System.out.println("Let's inspect the beans provided by Spring Boot:");
 
             String[] beanNames = ctx.getBeanDefinitionNames();
-            Arrays.sort(beanNames);
-            for (String beanName : beanNames) {
-                System.out.println(beanName);
-            }
-
+            AtomicLong count = new AtomicLong(1);
+            asList(beanNames).stream().sorted().forEach(name -> {
+                System.out.println(count + ":" + name);
+                count.getAndIncrement();
+            });
         };
     }
 
